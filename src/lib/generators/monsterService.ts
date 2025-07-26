@@ -59,8 +59,13 @@ export class MonsterService {
     return `${diceCount}W6${modifier >= 0 ? '+' : ''}${modifier}`
   }
 
-  // Verteile Fähigkeiten basierend auf Attributwerten
-  static distributeAbilities(attributes: Record<MonsterAttribute['type'], number>): Record<MonsterAttribute['type'], number> {
+  // Verteile Fähigkeiten basierend auf Alter und Stärke/Schwäche
+  static distributeAbilities(
+    age: MonsterAge,
+    attributes: Record<MonsterAttribute['type'], number>,
+    strengthAttr: MonsterAttribute['type'],
+    weaknessAttr: MonsterAttribute['type']
+  ): Record<MonsterAttribute['type'], number> {
     const distribution: Record<MonsterAttribute['type'], number> = {
       stärke: 0,
       geschick: 0,
@@ -69,15 +74,52 @@ export class MonsterService {
       mystik: 0
     }
 
-    // Sortiere Attribute nach Wert (höchste zuerst)
-    const sorted = Object.entries(attributes)
-      .sort(([, a], [, b]) => b - a)
-
-    // Verteile Fähigkeiten: 3, 2, 1, 1, 0
-    const counts = [3, 2, 1, 1, 0]
-    sorted.forEach(([attr, ], index) => {
-      distribution[attr as MonsterAttribute['type']] = counts[index] || 0
-    })
+    // Bestimme basierend auf Alter
+    switch (age.id) {
+      case 'jung':
+      case '2jung':
+        // Junge Monster: 1 Fähigkeit für gestärkte Attribute
+        distribution[strengthAttr] = 1
+        break
+        
+      case 'erwachsen':
+        // Erwachsene Monster: 1 Fähigkeit für nicht geschwächte Attribute
+        Object.keys(distribution).forEach(attr => {
+          if (attr !== weaknessAttr) {
+            distribution[attr as MonsterAttribute['type']] = 1
+          }
+        })
+        break
+        
+      case 'alt':
+        // Alte Monster: 2 für nicht geschwächte, 1 für geschwächte
+        Object.keys(distribution).forEach(attr => {
+          if (attr === weaknessAttr) {
+            distribution[attr as MonsterAttribute['type']] = 1
+          } else {
+            distribution[attr as MonsterAttribute['type']] = 2
+          }
+        })
+        break
+        
+      case 'altehrwuerdig':
+        // Altehrwürdige: 3 für gestärkte, 1 für alle anderen
+        Object.keys(distribution).forEach(attr => {
+          if (attr === strengthAttr) {
+            distribution[attr as MonsterAttribute['type']] = 3
+          } else {
+            distribution[attr as MonsterAttribute['type']] = 1
+          }
+        })
+        break
+        
+      case 'weltenbestie':
+        // Weltenbestien: 3 für jedes Attribut
+        Object.keys(distribution).forEach(attr => {
+          distribution[attr as MonsterAttribute['type']] = 3
+        })
+        break
+    }
 
     return distribution
   }
@@ -131,38 +173,38 @@ export class MonsterService {
   static getSpecialAction(strengthAttribute: MonsterAttribute['type']): MonsterSpecialAction {
     const specialActions: Record<MonsterAttribute['type'], MonsterSpecialAction> = {
       stärke: {
-        name: 'Zerschmettern',
+        name: 'Gnadenloser Angriff',
         attribute: 'stärke',
         cost: 5,
-        effect: 'Mächtiger Flächenangriff gegen alle Gegner in Reichweite',
+        effect: 'Würfle Angriff mit +5. Bei Treffer: Schaden × 2. Ziel muss STR-Probe schaffen oder wird 5m weggeschleudert und liegt am Boden.',
         exhaustion: true
       },
       geschick: {
-        name: 'Blitzangriff',
+        name: 'Ausweichmanöver',
         attribute: 'geschick',
         cost: 5,
-        effect: 'Drei schnelle Angriffe in einer Runde',
+        effect: 'Nach Aktivierung für 3 Runden: Alle gegnerischen Angriffe -5. Monster kann trotzdem normal angreifen.',
         exhaustion: true
       },
       willenskraft: {
-        name: 'Furchteinflößendes Brüllen',
+        name: 'Eisernen Willen',
         attribute: 'willenskraft',
         cost: 5,
-        effect: 'Alle Gegner müssen Willenskraft-Probe bestehen oder fliehen',
+        effect: 'Sofort: Heilt 30 SP. Für 3 Runden: Immun gegen mentale Effekte, geistigen Stress und Furcht.',
         exhaustion: true
       },
       logik: {
-        name: 'Taktischer Rückzug',
+        name: 'Kaltblütiger Mord',
         attribute: 'logik',
         cost: 5,
-        effect: 'Zieht sich zurück und erhält +4 auf Verteidigung für 2 Runden',
+        effect: 'Nächster Angriff: Automatischer Treffer mit Schaden × 3. Kann nur gegen Ziel mit ≤50% LP eingesetzt werden.',
         exhaustion: true
       },
       mystik: {
-        name: 'Mana-Explosion',
+        name: 'Magie durchdringen',
         attribute: 'mystik',
         cost: 5,
-        effect: 'Entlädt Mana in einer Explosion (3W6 Schaden)',
+        effect: 'Für 5 Runden: Ignoriert magische Verteidigung. Angriffe treffen trotz Schildzaubern, Schutzkreisen etc.',
         exhaustion: true
       }
     }

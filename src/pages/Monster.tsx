@@ -5,10 +5,12 @@ import { MonsterConfigurator } from '@/components/generators/monster/configurato
 export function Monster() {
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-4xl font-bold mb-8 font-medieval">Monster/Bestien Generator</h1>
+      <div className="flex items-center gap-4 mb-6">
+        <h1 className="text-3xl font-bold font-medieval">Monster/Bestien Generator</h1>
+      </div>
       
       <Tabs defaultValue="generator" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 max-w-md">
+        <TabsList className="grid w-full grid-cols-2 max-w-xs">
           <TabsTrigger value="generator">Generator</TabsTrigger>
           <TabsTrigger value="configurator">Konfigurator</TabsTrigger>
         </TabsList>

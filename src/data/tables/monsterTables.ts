@@ -143,42 +143,42 @@ const strengthAbilities: MonsterAbility[] = [
     name: 'Panzer',
     attribute: 'stärke',
     description: 'Natürliche Rüstung',
-    effect: 'Reduziert eingehenden Schaden'
+    effect: 'Reduziert LP-Schaden um 50% des STR-Attributs (aufgerundet). Falls aller Schaden verhindert würde, wird er stattdessen auf 1 reduziert. Permanent aktiv.'
   },
   {
     id: 'kampfrausch',
     name: 'Kampfrausch',
     attribute: 'stärke',
     description: 'Steigert sich in Rage',
-    effect: '+2 auf Angriff wenn verletzt'
+    effect: '+1 Schaden bei jedem Angriff (egal ob Treffer oder nicht). Stapelt sich bis max. 10×. Setzt sich zurück wenn Monster einen ganzen Zug lang nicht trifft. Mehrfach: Erhöht Schaden pro Stapel, nicht Maximum.'
   },
   {
     id: 'panik',
     name: 'Panik',
     attribute: 'stärke',
     description: 'Verursacht Furcht',
-    effect: 'Gegner müssen Willenskraft-Probe bestehen'
+    effect: 'Aktiviert einmalig pro Kampf bei LP-Schaden. +3 auf alle STR/GES-Proben bis Ende nächsten Zuges. Mehrfach: Weitere Aktivierungen.'
   },
   {
     id: 'graben',
     name: 'Graben',
     attribute: 'stärke',
     description: 'Kann sich eingraben',
-    effect: 'Bewegung unter der Erde'
+    effect: 'Unterirdische Bewegung mit 50% der normalen Geschwindigkeit. Hinterlässt begehbare Tunnel. Mehrfach: +50% Geschwindigkeit pro zusätzlicher Zuweisung.'
   },
   {
     id: 'unruhe',
     name: 'Unruhe',
     attribute: 'stärke',
-    description: 'Ständig in Bewegung',
-    effect: 'Schwerer zu treffen'
+    description: 'Mehrfachangriff',
+    effect: '4 AP für 2 Angriffe auf dasselbe Ziel. Angriffe nutzen: 3W6 + GES. Mehrfach: +1 Angriff pro zusätzlicher Zuweisung. Mit Projektil: Eine Ladung für alle Angriffe.'
   },
   {
     id: 'ergreifen',
     name: 'Ergreifen',
     attribute: 'stärke',
     description: 'Packt und hält Gegner',
-    effect: 'Gegner ist bewegungsunfähig'
+    effect: '5 AP um Ziel zu greifen (keine Probe nötig bei kleinerem Ziel). Gegriffen = normale Bewegung wenn Ziel kleiner. Mehrfach: +5m Bewegung pro Zuweisung beim Tragen.'
   }
 ]
 
@@ -189,42 +189,42 @@ const dexterityAbilities: MonsterAbility[] = [
     name: 'Umherspringen',
     attribute: 'geschick',
     description: 'Springt wild umher',
-    effect: '+2 auf Verteidigung'
+    effect: 'Bewegung + direkt folgender Angriff = -1 AP Kosten. Permanent aktiv.'
   },
   {
     id: 'projektil',
     name: 'Projektil',
     attribute: 'geschick',
     description: 'Fernkampfangriff',
-    effect: 'Kann aus der Distanz angreifen'
+    effect: '3 AP für Fernkampf bis 60m. Angriff: 3W6 + (GES × 2). Schaden: +STR. 1× pro Zug. Mehrfach: +1 Angriff pro Zug und +60m Reichweite.'
   },
   {
     id: 'rasende-geschwindigkeit',
     name: 'Rasende Geschwindigkeit',
     attribute: 'geschick',
     description: 'Extrem schnell',
-    effect: 'Doppelte Bewegungsreichweite'
+    effect: 'Bei 5m+ Bewegung kann Monster nicht abgefangen/angegriffen werden. Gilt für direkt vor/während/nach der Bewegung.'
   },
   {
     id: 'angepasste-bewegung',
     name: 'Angepasste Bewegung',
     attribute: 'geschick',
     description: 'Spezielle Fortbewegung',
-    effect: 'Klettern, Schwimmen oder ähnliches'
+    effect: '+50% Bewegung im Heimat-Terrain. Funktioniert nur im angepassten Lebensraum. Beispiele: Hufe für Steppe, Greifarme für Bäume.'
   },
   {
     id: 'fliegen',
     name: 'Fliegen',
     attribute: 'geschick',
     description: 'Kann fliegen',
-    effect: 'Flugbewegung'
+    effect: 'Freies Fliegen und Schweben. Mehrfach: +50% Fluggeschwindigkeit pro Zuweisung.'
   },
   {
     id: 'schmerzreaktion',
     name: 'Schmerzreaktion',
     attribute: 'geschick',
-    description: 'Reflexartiger Gegenangriff',
-    effect: 'Automatischer Gegenangriff bei Treffer'
+    description: 'Reflexartiger Rückzug',
+    effect: 'Bei Schaden (wenn nicht gegriffen): Muss sich GES Meter bewegen. Automatisch, keine Kosten.'
   }
 ]
 
@@ -235,42 +235,42 @@ const willpowerAbilities: MonsterAbility[] = [
     name: 'Aufbäumen',
     attribute: 'willenskraft',
     description: 'Kämpft bis zum Ende',
-    effect: 'Ignoriert Mali durch Verletzungen'
+    effect: 'Einmalig pro Kampf bei LP-Schaden. Stellt alle SP wieder her. Ignoriert Verletzungs-Mali bis Ende nächsten Zuges.'
   },
   {
     id: 'schmerzresistenz',
     name: 'Schmerzresistenz',
     attribute: 'willenskraft',
     description: 'Unempfindlich gegen Schmerz',
-    effect: 'Reduzierte Mali durch Schaden'
+    effect: 'Erste 3 fehlende LP haben keinen Malus. Ab 4+ fehlenden LP: Voller Malus. Tritt wieder in Kraft wenn unter 4 fehlende LP.'
   },
   {
     id: 'todeskampf',
     name: 'Todeskampf',
     attribute: 'willenskraft',
-    description: 'Letzter verzweifelter Angriff',
-    effect: 'Bonusangriff bei 0 LP'
+    description: 'Letzter verzweifelter Kampf',
+    effect: 'Aktiviert bei 25% oder weniger LP. +2 auf alle Attribut-Proben. Immun gegen Vergiftung. Ignoriert Knochenbrüche. Mehrfach: Nur Bonus stapelt sich.'
   },
   {
     id: 'aufwind',
     name: 'Aufwind',
     attribute: 'willenskraft',
     description: 'Motiviert sich selbst',
-    effect: 'Regeneriert SP im Kampf'
+    effect: '+4 SP Regeneration am Zugende. Nur wenn zwischen Zügen kein Schaden erlitten.'
   },
   {
     id: 'schadenfreude',
     name: 'Schadenfreude',
     attribute: 'willenskraft',
     description: 'Freut sich über Schmerz',
-    effect: 'Heilt LP wenn es Schaden verursacht'
+    effect: '+5 SP wenn Monster LP-Schaden verursacht. Pro getroffenen Angriff.'
   },
   {
     id: 'bedrohen',
     name: 'Bedrohen',
     attribute: 'willenskraft',
     description: 'Einschüchternde Präsenz',
-    effect: 'Gegner erhalten Mali auf Angriffe'
+    effect: '1× pro Zug ohne AP-Kosten. Wurf: 3W6 + WIL. Ziel wehrt mit WIL oder LOG. Bei Erfolg: Ziel geistig gestresst + halbe Bewegung. Mehrfach: +1 Anwendung pro Zug.'
   }
 ]
 
@@ -281,42 +281,42 @@ const logicAbilities: MonsterAbility[] = [
     name: 'Einschätzen',
     attribute: 'logik',
     description: 'Analysiert Gegner',
-    effect: 'Erkennt Schwächen'
+    effect: '1× pro Zug ohne Kosten. Erkennt aktuelle SP und LP eines Ziels.'
   },
   {
     id: 'tot-stellen',
     name: 'Tot Stellen',
     attribute: 'logik',
     description: 'Täuscht den Tod vor',
-    effect: 'Gegner brechen Angriff ab'
+    effect: 'Aktiviert bei 20% LP (oder weniger). Herausfordernde LOG-Probe zum Durchschauen. Mehrfach: Weitere Schwellen (bei 3×: 60%, 40%, 20%). Maximum 5× (dann bei jedem LP-Schaden).'
   },
   {
     id: 'misstrauen',
     name: 'Misstrauen',
     attribute: 'logik',
     description: 'Extrem vorsichtig',
-    effect: 'Immun gegen Täuschungen'
+    effect: 'Bei Überraschungsangriff: Würfle 1W6. Bei 1-2: Darf trotzdem verteidigen. Mehrfach: Bei 2×: 1-4, bei 3×: Immer. Maximum 3×.'
   },
   {
     id: 'erwarten',
     name: 'Erwarten',
     attribute: 'logik',
     description: 'Antizipiert Angriffe',
-    effect: '+1 auf Initiative'
+    effect: '2× pro Runde: Freier Nahkampfangriff wenn sich jemand in Reichweite bewegt. Angriff: 3W6 + (GES × 1,5). Mehrfach: +1 Angriff pro Runde. Mit Projektil: Auch Fernkampf möglich.'
   },
   {
     id: 'unergruendlich',
     name: 'Unergründlich',
     attribute: 'logik',
     description: 'Unvorhersehbare Aktionen',
-    effect: 'Gegner können Aktionen nicht vorhersehen'
+    effect: 'ANALYSE-Aktion funktioniert kaum. Bei 2×: ANALYSE gibt Falschinformationen. Maximum 2×.'
   },
   {
     id: 'tarnung',
     name: 'Tarnung',
     attribute: 'logik',
     description: 'Meister der Tarnung',
-    effect: 'Kann sich verstecken'
+    effect: 'Gezielt gesucht: Erst aus 50m erkennbar. Nicht gesucht: Erst aus 15m erkennbar. Solange sich nicht auffällig bewegt. Stapelt sich nicht.'
   }
 ]
 
@@ -327,42 +327,42 @@ const mysticAbilities: MonsterAbility[] = [
     name: 'Zauberbestie',
     attribute: 'mystik',
     description: 'Kann Zauber wirken',
-    effect: 'Zugang zu Zaubern'
+    effect: '2 AP für Mana verdichten. 1 AP für Mana aktivieren. Bei 2×: +Mana weben (2 AP). Bei 3×: +Mana kondensieren (3 AP). Maximum 3×.'
   },
   {
     id: 'manawirbel',
     name: 'Manawirbel',
     attribute: 'mystik',
     description: 'Stört Magie',
-    effect: 'Zauber in der Nähe sind erschwert'
+    effect: 'Verdichtetes Mana in Nahkampfreichweite zerfasert. Zu Beginn des Monster-Zuges. Außer eigene Zauber. Mehrfach: Größerer Radius.'
   },
   {
     id: 'manabarriere',
     name: 'Manabarriere',
     attribute: 'mystik',
     description: 'Magischer Schutz',
-    effect: 'Resistenz gegen Zauber'
+    effect: 'LP-Schaden halbiert (min -5). Kann auf 0 reduzieren trotz PANZER. Deaktiviert für 1 Runde nach LP-Schaden. Mehrfach: +1 Treffer bevor Deaktivierung.'
   },
   {
     id: 'absorption',
     name: 'Absorption',
     attribute: 'mystik',
     description: 'Absorbiert Mana',
-    effect: 'Stiehlt SP von Zauberern'
+    effect: 'Bei magischem Schaden: Heilt 50% am Zugende. Auch wenn nur SP getroffen. Bei vollen LP: +3 SP stattdessen.'
   },
   {
     id: 'gift',
     name: 'Gift',
     attribute: 'mystik',
     description: 'Giftiger Angriff',
-    effect: 'Verursacht Vergiftung'
+    effect: 'Bei Nahkampf-LP-Schaden: +1 Giftschaden. Ziel würfelt auf Vergiftungstabelle. Mehrfach: Mehr Giftschaden. Mit Projektil: Auch Fernkampf.'
   },
   {
     id: 'zwilling',
     name: 'Zwilling',
     attribute: 'mystik',
-    description: 'Erschafft Illusionen',
-    effect: 'Erzeugt Trugbilder von sich'
+    description: 'Erschafft Duplikat',
+    effect: 'Exakt identisches zweites Monster. Gleiche Attribute, Fähigkeiten, Eigenschaften. Verbündet oder tolerieren sich. Kann NICHT mehrfach gewürfelt werden.'
   }
 ]
 
@@ -433,7 +433,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'aengstlich',
         name: 'Ängstlich',
-        effect: 'Flieht bei halben LP'
+        effect: 'Erhöhter Staminaschaden: +3 wenn Monster den Angriff kommen sieht. Gilt nur für sichtbare Angriffe. Betrifft nur Stamina, nicht LP direkt.'
       }
     },
     {
@@ -441,7 +441,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'vertrieben',
         name: 'Vertrieben',
-        effect: 'Wurde aus seinem Revier vertrieben'
+        effect: 'Monster stammt aus anderer Umgebung. Malus -1 auf ALLE Proben. Kann Fähigkeiten nicht optimal einsetzen. Aggressiver als für Alter normal (aktive Mana-Suche).'
       }
     },
     {
@@ -449,7 +449,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'aquaphobie',
         name: 'Aquaphobie',
-        effect: 'Angst vor Wasser'
+        effect: 'Angst vor Wasser tiefer als Bauchhöhe. Meidet solche Gewässer wenn möglich. Im tiefen Wasser: Körperlich, geistig UND mystisch gestresst. Stress endet erst auf trockenem Land/beim Fliegen. Überschreibt andere Instinkte - will um jeden Preis raus.'
       }
     },
     {
@@ -457,7 +457,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'traege',
         name: 'Träge',
-        effect: '-1 auf Initiative'
+        effect: '1. Kampfrunde: Initiative -20. 2. Kampfrunde: Initiative -10. Ab 3. Kampfrunde: Initiative -5 (permanent). Monster braucht Zeit um "warm zu werden".'
       }
     },
     {
@@ -465,7 +465,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'verletzt',
         name: 'Verletzt',
-        effect: 'Startet mit -25% LP'
+        effect: 'Malus -2 auf alle GES-Proben. Angriffe auf verletzte Stelle: +3 Schaden. Nach 1 Monat: Malus sinkt auf -1. Nach 3 Monaten: Wird zu VERNARBT. Schützt verletzte Stelle im Kampf. Körperteil muss notiert werden. Kann im Spiel neu erhalten werden (bei ≤25% LP Kampfende).'
       }
     },
     {
@@ -473,7 +473,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'vernarbt',
         name: 'Vernarbt',
-        effect: 'Alte Verletzungen behindern'
+        effect: 'Angriffe auf Narben-Stelle: +3 STAMINAschaden. Zusatzschaden kann auf LP übergreifen (nur wenn SP nicht für ganzen Angriff reicht). Bei 0 SP: Kein Zusatzschaden auf LP. Körperteil muss notiert werden. Kann mehrfach für verschiedene Körperteile gelten. Wenn VERLETZT + VERNARBT am selben Teil: Nur VERLETZT gilt.'
       }
     },
     {
@@ -481,7 +481,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'stahlfuerchtig',
         name: 'Stahlfürchtig',
-        effect: 'Angst vor Metallwaffen'
+        effect: 'Respekt vor Stahl-/Wandelholz-/Monsterwaffen. Vorsichtiges Ausweichen kostet mehr. Staminaschaden von solchen Waffen: +25% (min +5). Berechnung NACH allen anderen Modifikatoren. Zusatzschaden geht nur auf LP wenn noch SP vorhanden waren.'
       }
     },
     {
@@ -489,7 +489,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'zerbrechlich',
         name: 'Zerbrechlich',
-        effect: '-10% LP'
+        effect: 'LP-Schaden immer +5. Mit MANABARRIERE: Kein Zusatzschaden solange Barriere aktiv. Sobald Barriere fällt: Zusatzschaden gilt wieder.'
       }
     },
     {
@@ -497,7 +497,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'manablind',
         name: 'Manablind',
-        effect: 'Kann Mana nicht wahrnehmen'
+        effect: 'Kann Mana NICHT wahrnehmen (sonst können alle Monster das). Spürt nur instinktiv ob Umgebung genug Mana produziert. Muss auf gut Glück neue Orte suchen. Erkennt Zauber nicht als solche (außer eigene).'
       }
     },
     {
@@ -505,7 +505,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'passiv',
         name: 'Passiv',
-        effect: 'Greift nur an wenn angegriffen'
+        effect: 'NICHT aggressiv gegen Tiere/Humanoide. Greift andere Monster trotzdem an. Verteidigt sich bei Angriff mit voller Stärke. Versucht eher Kampfende als Gegner zu töten. Probleme durch: Konsumverhalten, Mana-Absorption, Zerstörung für Nestbau. Zeigt nur gegen andere Monster echte Mordlust.'
       }
     },
     {
@@ -513,7 +513,7 @@ export const badPropertiesTable: PropertyTable = {
       value: {
         id: 'blinde-wut',
         name: 'Blinde Wut',
-        effect: '-2 auf Verteidigung im Kampf'
+        effect: 'Im Kampf: Greift IMMER nächstes/auffälligstes Ziel an. Auch wenn Köder oder überlegener Feind (z.B. Weltenbestie). Wechselt Ziel sobald aktuelles fällt. Ignoriert Bewusstlose solange andere Feinde da sind. Außerhalb Kampf: Normal aggressiv. Verfällt auch bei ADRENALINSCHUB in Kampfeswut.'
       }
     }
   ]

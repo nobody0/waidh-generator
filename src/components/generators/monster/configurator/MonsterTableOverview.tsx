@@ -69,11 +69,7 @@ const MONSTER_TABLES: TableInfo[] = [
   }
 ]
 
-interface MonsterTableOverviewProps {
-  onSelectTable: (table: DiceTable<any>) => void
-}
-
-export function MonsterTableOverview({ onSelectTable }: MonsterTableOverviewProps) {
+export function MonsterTableOverview() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const categories = Array.from(new Set(MONSTER_TABLES.map(t => t.category)))
@@ -110,8 +106,6 @@ export function MonsterTableOverview({ onSelectTable }: MonsterTableOverviewProp
         {filteredTables.map(({ table, category, description }) => (
           <Card 
             key={table.id}
-            className="cursor-pointer hover:bg-accent transition-colors"
-            onClick={() => onSelectTable(table)}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -122,7 +116,6 @@ export function MonsterTableOverview({ onSelectTable }: MonsterTableOverviewProp
                     <p className="text-sm text-muted-foreground">{description}</p>
                   </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
             </CardHeader>
             <CardContent className="pt-0">
