@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { DiceTable } from '@/types/dice'
+import type { DiceTable } from '@/types/dice'
 
 interface CustomTable {
   id: string

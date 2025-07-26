@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { DiceTable, TableProbability } from '@/types/dice'
+import type { DiceTable } from '@/types/dice'
 import { DiceService } from '@/lib/dice/diceService'
 import { cn } from '@/lib/utils'
 
@@ -23,6 +23,17 @@ export function DiceTableDisplay<T>({ table, className }: DiceTableDisplayProps<
 
   const formatProbability = (prob: number): string => {
     return `${(prob * 100).toFixed(1)}%`
+  }
+
+  const formatValue = (value: T): string => {
+    if (typeof value === 'object' && value !== null) {
+      // Handle MonsterAge and other complex objects
+      if ('name' in value) {
+        return (value as any).name
+      }
+      return JSON.stringify(value)
+    }
+    return String(value)
   }
 
   return (
@@ -59,7 +70,7 @@ export function DiceTableDisplay<T>({ table, className }: DiceTableDisplayProps<
                   {formatRange(entry.range)}
                 </div>
                 <div className="col-span-6">
-                  <div className="font-medium">{String(entry.value)}</div>
+                  <div className="font-medium">{formatValue(entry.value)}</div>
                   {entry.description && (
                     <div className="text-xs text-muted-foreground">{entry.description}</div>
                   )}
@@ -80,7 +91,7 @@ export function DiceTableDisplay<T>({ table, className }: DiceTableDisplayProps<
           <div className="space-y-1">
             {probabilities.map((prob, index) => (
               <div key={index} className="flex items-center gap-2">
-                <div className="flex-1 text-sm">{String(prob.value)}</div>
+                <div className="flex-1 text-sm">{formatValue(prob.value)}</div>
                 <div className="w-32 bg-muted rounded-full h-2">
                   <div 
                     className="bg-primary h-2 rounded-full transition-all"

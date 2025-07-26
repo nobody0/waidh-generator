@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Download, Upload, Plus, Trash2, Save } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { DiceTable, DiceTableEntry } from '@/types/dice'
+import type { DiceTable, DiceTableEntry } from '@/types/dice'
 import { cn } from '@/lib/utils'
 
 interface DiceTableConfiguratorProps<T> {
