@@ -1,5 +1,6 @@
 import { Heart, Shield, Zap, Brain, Swords, Sparkles, AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ATTRIBUTE_SHORT } from '@/types/monster'
 import type { Monster } from '@/types/monster'
 
@@ -9,7 +10,8 @@ interface MonsterSummaryCardProps {
 
 export function MonsterSummaryCard({ monster }: MonsterSummaryCardProps) {
   return (
-    <div className="space-y-4">
+    <TooltipProvider>
+      <div className="space-y-4">
       {/* Header */}
       <Card>
         <CardHeader className="pb-3">
@@ -33,25 +35,31 @@ export function MonsterSummaryCard({ monster }: MonsterSummaryCardProps) {
               const hasBonus = bonus !== 0
               
               return (
-                <div 
-                  key={attr}
-                  className="text-center p-2 rounded-lg border bg-muted/30"
-                >
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {ATTRIBUTE_SHORT[attr as keyof typeof ATTRIBUTE_SHORT]}
-                  </div>
-                  <div className="text-lg font-bold">
-                    <span className="text-foreground">{value}</span>
-                    {hasBonus && (
-                      <span className={`text-sm ml-1 ${
-                        bonus > 0 ? 'text-green-600 dark:text-green-400' :
-                        'text-red-600 dark:text-red-400'
-                      }`}>
-                        {bonus >= 0 ? '+' : ''}{bonus}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <Tooltip key={attr} delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <div className="text-center p-2 rounded-lg border bg-muted/30 ">
+                      <div className="text-xs font-medium text-muted-foreground">
+                        {ATTRIBUTE_SHORT[attr as keyof typeof ATTRIBUTE_SHORT]}
+                      </div>
+                      <div className="text-lg font-bold">
+                        <span className="text-foreground">{value}</span>
+                        {hasBonus && (
+                          <span className={`text-sm ml-1 ${
+                            bonus > 0 ? 'text-green-600 dark:text-green-400' :
+                            'text-red-600 dark:text-red-400'
+                          }`}>
+                            {bonus >= 0 ? '+' : ''}{bonus}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="font-mono text-xs">
+                      {baseValue} (Basis) {bonus !== 0 ? `${bonus >= 0 ? '+' : ''}${bonus} (Modifikator)` : ''}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
               )
             })}
           </div>
@@ -65,36 +73,94 @@ export function MonsterSummaryCard({ monster }: MonsterSummaryCardProps) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-red-500" />
-              <span className="text-sm text-muted-foreground">LP:</span>
-              <span className="font-mono font-bold">{monster.maxLp}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-blue-500" />
-              <span className="text-sm text-muted-foreground">SP:</span>
-              <span className="font-mono font-bold">{monster.maxSp}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-gray-500" />
-              <span className="text-sm text-muted-foreground">AP:</span>
-              <span className="font-mono font-bold">{monster.ap}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Brain className="w-4 h-4 text-purple-500" />
-              <span className="text-sm text-muted-foreground">Initiative:</span>
-              <span className="font-mono font-bold">{monster.initiative}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Swords className="w-4 h-4 text-orange-500" />
-              <span className="text-sm text-muted-foreground">Angriff:</span>
-              <span className="font-mono font-bold">{monster.attack}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-green-500" />
-              <span className="text-sm text-muted-foreground">Verteidigung:</span>
-              <span className="font-mono font-bold">{monster.defense}</span>
-            </div>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Heart className="w-4 h-4 text-red-500" />
+                  <span className="text-sm text-muted-foreground">LP:</span>
+                  <span className="font-mono font-bold">{monster.maxLp}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">
+                  {monster.age.baseLP} (Basis) + {monster.attributes.stärke - monster.age.baseAttributes} (STR-Bonus)
+                  {monster.age.id === 'weltenbestie' && ' × 2'}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Zap className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm text-muted-foreground">SP:</span>
+                  <span className="font-mono font-bold">{monster.maxSp}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">
+                  {monster.age.baseSP} (Basis) + {monster.attributes.willenskraft - monster.age.baseAttributes} (WIL-Bonus) × {monster.age.spMultiplier}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Shield className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-muted-foreground">AP:</span>
+                  <span className="font-mono font-bold">{monster.ap}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">Basis-AP nach Alter</p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Brain className="w-4 h-4 text-purple-500" />
+                  <span className="text-sm text-muted-foreground">Initiative:</span>
+                  <span className="font-mono font-bold">{monster.initiative}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">
+                  1 (Basis) + {monster.attributes.geschick} (GES) + {monster.attributes.logik} (LOG)
+                </p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Swords className="w-4 h-4 text-orange-500" />
+                  <span className="text-sm text-muted-foreground">Angriff:</span>
+                  <span className="font-mono font-bold">{monster.attack}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">
+                  {monster.attack.split('W')[0]}W6 + ({monster.attributes.geschick} × 2)
+                </p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 ">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-sm text-muted-foreground">Verteidigung:</span>
+                  <span className="font-mono font-bold">{monster.defense}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="font-mono text-xs">
+                  {monster.defense.split('W')[0]}W6 + ({monster.attributes.geschick} × 2)
+                </p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </CardContent>
       </Card>
@@ -165,6 +231,7 @@ export function MonsterSummaryCard({ monster }: MonsterSummaryCardProps) {
           </CardContent>
         </Card>
       )}
-    </div>
+      </div>
+    </TooltipProvider>
   )
 }
