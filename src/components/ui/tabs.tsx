@@ -12,7 +12,8 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      "inline-flex h-12 items-center justify-center rounded-md bg-steel-700/50 p-1 text-muted-foreground",
+      "border border-steel-600",
       className
     )}
     {...props}
@@ -27,7 +28,17 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      "relative inline-flex items-center justify-center whitespace-nowrap px-6 py-3",
+      "text-sm font-medium ring-offset-background transition-all duration-200",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "disabled:pointer-events-none disabled:opacity-50",
+      // Pentagon shape
+      "clip-path-[polygon(15%_0%,85%_0%,100%_50%,85%_100%,15%_100%,0%_50%)]",
+      // Active state
+      "data-[state=active]:bg-steel-700 data-[state=active]:text-steel-50",
+      "data-[state=active]:shadow-steel",
+      // Hover state
+      "hover:bg-steel-600/50 hover:text-steel-100",
       className
     )}
     {...props}

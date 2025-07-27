@@ -52,10 +52,10 @@ export function Home() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4 font-medieval">
+        <h1 className="text-5xl font-bold mb-4 font-display steel-emboss text-primary">
           WAIDH RPG Generator
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-body">
           Ein mächtiges Werkzeug für Spielleiter des WAIDH Tabletop-Rollenspiels.
           Erschaffe Monster, Dungeons, Abenteuer und mehr mit nur wenigen Klicks.
         </p>
@@ -65,15 +65,15 @@ export function Home() {
         {features.map((feature) => {
           const Icon = feature.icon
           return (
-            <Card key={feature.title} className="hover:shadow-lg transition-shadow">
+            <Card key={feature.title} className="hover:shadow-lg transition-all hover:-translate-y-1 duration-200">
               <CardHeader>
                 <Icon className="w-8 h-8 mb-2 text-primary" />
-                <CardTitle className="font-medieval">{feature.title}</CardTitle>
+                <CardTitle className="font-display">{feature.title}</CardTitle>
                 <CardDescription>{feature.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Link to={feature.link}>
-                  <Button className="w-full">Zum Generator</Button>
+                  <Button className="w-full" variant="steel">Zum Generator</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -82,11 +82,11 @@ export function Home() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="bg-muted/50">
+        <Card className="bg-steel-700/50 border-rust-500/40">
           <CardHeader>
-            <CardTitle className="font-medieval">Über WAIDH</CardTitle>
+            <CardTitle className="font-display text-primary">Über WAIDH</CardTitle>
           </CardHeader>
-          <CardContent className="prose prose-invert max-w-none">
+          <CardContent className="space-y-3 text-steel-100">
             <p>
               WAIDH ist ein deutsches Tabletop-Rollenspiel in einer mittelalterlichen 
               Fantasywelt voller Magie. Die Spielwelt ist gefährlich - Monster, 
@@ -103,7 +103,7 @@ export function Home() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="font-medieval flex items-center gap-2">
+            <CardTitle className="font-display flex items-center gap-2 text-primary">
               <Keyboard className="w-5 h-5" />
               Tastenkürzel
             </CardTitle>
@@ -115,28 +115,28 @@ export function Home() {
                   <RefreshCw className="w-4 h-4" />
                   Neu generieren
                 </span>
-                <kbd className="px-2 py-1 text-xs bg-muted rounded">Space</kbd>
+                <kbd className="px-2 py-1 text-xs bg-steel-700 rounded border border-steel-600 font-mono">Space</kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <ArrowLeft className="w-4 h-4" />
                   Vorheriges Element
                 </span>
-                <kbd className="px-2 py-1 text-xs bg-muted rounded">←</kbd>
+                <kbd className="px-2 py-1 text-xs bg-steel-700 rounded border border-steel-600 font-mono">←</kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <ArrowRight className="w-4 h-4" />
                   Nächstes Element
                 </span>
-                <kbd className="px-2 py-1 text-xs bg-muted rounded">→</kbd>
+                <kbd className="px-2 py-1 text-xs bg-steel-700 rounded border border-steel-600 font-mono">→</kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <Trash2 className="w-4 h-4" />
                   Löschen
                 </span>
-                <kbd className="px-2 py-1 text-xs bg-muted rounded">Del</kbd>
+                <kbd className="px-2 py-1 text-xs bg-steel-700 rounded border border-steel-600 font-mono">Del</kbd>
               </div>
               <div className="border-t pt-2 mt-2">
                 <p className="text-xs text-muted-foreground">

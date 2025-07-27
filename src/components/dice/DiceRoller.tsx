@@ -49,7 +49,7 @@ export function DiceRoller({ diceCount, className }: DiceRollerProps) {
       <Button
         onClick={rollDice}
         disabled={isRolling}
-        variant="outline"
+        variant="steel"
         size="sm"
         className="font-medieval"
       >
@@ -57,20 +57,22 @@ export function DiceRoller({ diceCount, className }: DiceRollerProps) {
         {diceCount}W6
       </Button>
       {currentRoll.length > 0 && (
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {currentRoll.map((die, index) => (
             <div
               key={index}
               className={cn(
-                "w-8 h-8 bg-primary text-primary-foreground rounded flex items-center justify-center font-bold transition-all",
-                isRolling && "animate-bounce"
+                "w-10 h-10 dice-3d flex items-center justify-center",
+                "font-mono text-xl font-bold text-steel-900",
+                "border border-steel-400",
+                isRolling && "dice-rolling"
               )}
             >
               {die}
             </div>
           ))}
           {!isRolling && (
-            <div className="ml-2 flex items-center text-muted-foreground">
+            <div className="ml-2 flex items-center text-steel-300 font-mono">
               = {currentRoll.reduce((sum, die) => sum + die, 0)}
             </div>
           )}
