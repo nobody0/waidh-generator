@@ -157,6 +157,20 @@ export class DiceService {
     return this.rollOnTable(table, fixedValue)
   }
 
+  static getResultForRoll<T>(table: DiceTable<T>, roll: number): DiceRollResult<T> {
+    const entry = this.findTableEntry(table.entries, roll)
+    if (!entry) {
+      throw new Error(`No entry found for roll ${roll} in table ${table.id}`)
+    }
+
+    return {
+      table,
+      roll,
+      entry,
+      value: entry.value
+    }
+  }
+
   static getTableProbabilities<T>(table: DiceTable<T>): TableProbability<T>[] {
     const totalCombinations = this.getTotalCombinations(table.diceType)
     const probabilityMap = new Map<T, number>()

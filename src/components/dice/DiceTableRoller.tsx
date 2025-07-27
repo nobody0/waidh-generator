@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Dices, RefreshCw } from 'lucide-react'
+import { Dices, RefreshCw, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { DiceTable, DiceRollResult } from '@/types/dice'
 import { DiceService } from '@/lib/dice/diceService'
 import { useDiceStore } from '@/store/diceStore'
 import { cn } from '@/lib/utils'
+import { Dice3D } from './Dice3D'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface DiceTableRollerProps<T> {
   table: DiceTable<T>
@@ -25,20 +27,43 @@ export function DiceTableRoller<T>({
   const [manualValue, setManualValue] = useState<number | null>(null)
   const [showManualInput, setShowManualInput] = useState(false)
   const [isRolling, setIsRolling] = useState(false)
+  const [show3DDice, setShow3DDice] = useState(false)
+  const [diceType, setDiceType] = useState<'1d6' | '2d6' | '3d6'>('1d6')
+  const [rollTrigger, setRollTrigger] = useState(0)
 
   const handleRoll = async () => {
     setIsRolling(true)
+    
+    // Show 3D dice for supported types
+    if (table.diceType === '1d6' || table.diceType === '2d6' || table.diceType === '3d6') {
+      setDiceType(table.diceType)
+      setShow3DDice(true)
+      setRollTrigger(prev => prev + 1)
+    } else {
+      // For custom dice, use regular animation
+      await new Promise(resolve => setTimeout(resolve, 500))
+      completeDiceRoll()
+    }
+  }
 
-    // Animation delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    const result = DiceService.rollWithOverride(table, manualValue || undefined)
+  const completeDiceRoll = (diceResults?: number[]) => {
+    let result: DiceRollResult<T>
+    
+    if (diceResults && diceResults.length > 0) {
+      // Use the 3D dice results
+      const total = diceResults.reduce((sum, val) => sum + val, 0)
+      result = DiceService.getResultForRoll(table, total)
+    } else {
+      // Use manual or random roll
+      result = DiceService.rollWithOverride(table, manualValue || undefined)
+    }
+    
     setCurrentResult(result)
     
     // Add to history
     addRoll(
       `${table.name} (${table.diceType})`,
-      [result.roll],
+      diceResults || [result.roll],
       result.roll
     )
 
@@ -48,6 +73,11 @@ export function DiceTableRoller<T>({
 
     setIsRolling(false)
     setManualValue(null)
+    
+    // Hide 3D dice after animation completes
+    setTimeout(() => {
+      setShow3DDice(false)
+    }, 2000)
   }
 
   const formatValue = (value: T): string => {
@@ -78,7 +108,11 @@ export function DiceTableRoller<T>({
               size="sm"
               className="font-medieval"
             >
-              <Dices className="w-4 h-4 mr-1" />
+              {(table.diceType === '1d6' || table.diceType === '2d6' || table.diceType === '3d6') ? (
+                <Sparkles className="w-4 h-4 mr-1" />
+              ) : (
+                <Dices className="w-4 h-4 mr-1" />
+              )}
               Würfeln ({table.diceType})
             </Button>
           </div>
@@ -169,6 +203,24 @@ export function DiceTableRoller<T>({
           </div>
         )}
       </CardContent>
+      
+      <AnimatePresence>
+        {show3DDice && (
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Dice3D 
+              type={diceType}
+              trigger={rollTrigger}
+              onRollComplete={completeDiceRoll}
+              className="pointer-events-auto"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Card>
   )
 }

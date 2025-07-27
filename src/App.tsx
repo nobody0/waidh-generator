@@ -7,6 +7,7 @@ import { Abenteuer } from './pages/Abenteuer'
 import { NSCs } from './pages/NSCs'
 import { Schicksal } from './pages/Schicksal'
 import { Vergiftung } from './pages/Vergiftung'
+import Dice from './pages/Dice'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="nscs" element={<NSCs />} />
           <Route path="schicksal" element={<Schicksal />} />
           <Route path="vergiftung" element={<Vergiftung />} />
+          <Route path="wuerfel" element={<Dice />} />
         </Route>
       </Routes>
     </BrowserRouter>

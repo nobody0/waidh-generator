@@ -13,6 +13,7 @@ export function Layout() {
     { path: '/nscs', label: 'NSCs' },
     { path: '/schicksal', label: 'Schicksal' },
     { path: '/vergiftung', label: 'Vergiftung' },
+    { path: '/wuerfel', label: 'Würfel' },
   ]
 
   return (
