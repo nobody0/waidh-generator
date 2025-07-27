@@ -61,9 +61,17 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
     if (currentMonster && currentIndex >= 0) {
       setIsLoadingFromHistory(true)
       setMonster(currentMonster)
-      // Reconstruct the state from the monster
-      // This is a simplified version - in a real app we might store the full state
-      setAgeResult({ value: currentMonster.age, roll: 1 })
+      
+      // Use stored dice rolls if available, otherwise use defaults
+      const diceRolls = currentMonster.diceRolls || {
+        age: 1,
+        strength: 1,
+        weakness: 1,
+        properties: []
+      }
+      
+      setAgeResult({ value: currentMonster.age, roll: diceRolls.age })
+      
       // Try to reconstruct strength/weakness from attributes
       const attrs = currentMonster.attributes
       const baseAttr = currentMonster.age.baseAttributes
@@ -90,10 +98,16 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
         }
       })
       
-      setStrengthResult({ value: strengthAttr, roll: 1 })
-      setWeaknessResult({ value: weaknessAttr, roll: 1 })
+      setStrengthResult({ value: strengthAttr, roll: diceRolls.strength })
+      setWeaknessResult({ value: weaknessAttr, roll: diceRolls.weakness })
       setAbilities(currentMonster.abilities)
-      setProperties(currentMonster.properties.map(p => ({ value: p, roll: 1 })))
+      
+      // Map properties with their dice rolls
+      const propertyResults = currentMonster.properties.map((p, index) => ({
+        value: p,
+        roll: diceRolls.properties[index] || 1
+      }))
+      setProperties(propertyResults)
     }
   }, [currentMonster, currentIndex])
 
@@ -357,7 +371,15 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
         ageResult.value.xValue,
         ageResult.value.yValue,
         abilities,
-        properties.map(p => p.value)
+        properties.map(p => p.value),
+        undefined, // name
+        undefined, // description
+        {
+          age: ageResult.roll,
+          strength: strengthResult.roll,
+          weakness: weaknessResult.roll,
+          properties: properties.map(p => p.roll)
+        }
       )
       setMonster(newMonster)
       

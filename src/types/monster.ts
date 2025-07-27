@@ -71,6 +71,14 @@ export interface Monster {
   properties: MonsterProperty[]
   specialAction: MonsterSpecialAction
   
+  // Würfelergebnisse
+  diceRolls?: {
+    age: number
+    strength: number
+    weakness: number
+    properties: number[]
+  }
+  
   // Meta
   name?: string
   description?: string

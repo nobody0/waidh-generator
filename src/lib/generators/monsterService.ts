@@ -224,7 +224,13 @@ export class MonsterService {
     abilities: MonsterAbility[],
     properties: MonsterProperty[],
     name?: string,
-    description?: string
+    description?: string,
+    diceRolls?: {
+      age: number
+      strength: number
+      weakness: number
+      properties: number[]
+    }
   ): Monster {
     // Basis-Attribute (alle beim Alter-abhängigen Basiswert)
     const attributes: Record<MonsterAttribute['type'], number> = {
@@ -259,6 +265,7 @@ export class MonsterService {
       abilities,
       properties,
       specialAction: this.getSpecialAction(strengthAttr),
+      diceRolls,
       name,
       description,
       createdAt: new Date()
