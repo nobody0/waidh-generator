@@ -34,8 +34,6 @@ export const SchicksalGeneratorSingle = memo(function SchicksalGeneratorSingle()
     
     const result = DiceService.rollOnTable(schicksalTable)
     
-    // Hole passende Beispiele für Kontext
-    const beispiele = schicksalBeispiele[selectedKontext]?.[result.value.id] || []
     
     // Erstelle Wurf-Objekt
     const wurf: SchicksalWurf = {

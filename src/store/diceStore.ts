@@ -11,12 +11,14 @@ interface DiceRoll {
 interface DiceStore {
   // Keep history for components that might use it
   history: DiceRoll[]
+  soundEnabled: boolean
   addRoll: (dice: string, results: number[], total: number) => void
   clearHistory: () => void
 }
 
 export const useDiceStore = create<DiceStore>((set) => ({
   history: [],
+  soundEnabled: true,
   addRoll: (dice, results, total) =>
     set((state) => ({
       history: [

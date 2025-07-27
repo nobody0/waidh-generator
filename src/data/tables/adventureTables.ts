@@ -2,9 +2,6 @@ import type {
   AdventureProblemTable, 
   AdventureTriggerTable, 
   AdventureObstacleTable,
-  AdventureProblem,
-  AdventureTrigger,
-  AdventureObstacle
 } from '@/types/adventure'
 
 // Problem-Tabelle (1W6)

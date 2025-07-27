@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { ArrowRight, DoorOpen, Star, Users, Sparkles, Package } from 'lucide-react'
 import type { Chamber } from '@/types/kerker'
 
@@ -91,7 +90,7 @@ export function KerkerVisualizer({
           {chambers.map((chamber, index) => (
             <div key={chamber.id} className="flex items-center gap-2 shrink-0">
               <div
-                draggable={!chamber.isCore && onChamberReorder}
+                draggable={!chamber.isCore && !!onChamberReorder}
                 onDragStart={(e) => handleDragStart(e, chamber.number)}
                 onDragOver={(e) => handleDragOver(e, chamber.number)}
                 onDragLeave={handleDragLeave}

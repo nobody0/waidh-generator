@@ -140,8 +140,15 @@ export const archetypenNachArt = {
   mystisch: mystischeArchetypen
 }
 
+// Type for weapon info
+type WaffeInfo = {
+  schaden: string
+  reichweite: string
+  spezial?: string
+}
+
 // Waffen-Datenbank
-export const waffenDatenbank = {
+export const waffenDatenbank: Record<string, WaffeInfo> = {
   // Nahkampfwaffen
   'Fäuste': { schaden: '1W6', reichweite: 'Nahkampf' },
   'Schlagring': { schaden: '1W6+1', reichweite: 'Nahkampf' },

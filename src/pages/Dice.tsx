@@ -1,6 +1,5 @@
-import { FreeDiceRoller } from '@/components/dice/FreeDiceRoller'
+import { FreeDiceRoller } from '@/components/dice/FreeDiceRollerSimple'
 import { DiceHistory } from '@/components/dice/DiceHistory'
-import { QuickDiceBar } from '@/components/dice/QuickDiceBar'
 
 export default function DicePage() {
   return (
@@ -16,8 +15,6 @@ export default function DicePage() {
         <FreeDiceRoller />
         <DiceHistory />
       </div>
-      
-      <QuickDiceBar />
     </div>
   )
 }

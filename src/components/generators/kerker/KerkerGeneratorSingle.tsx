@@ -24,8 +24,6 @@ import type {
   GuardLevel,
   KerkerEnvironment,
   Chamber,
-  ChamberProtection,
-  ChamberTreasure,
   CoreSpellContent
 } from '@/types/kerker'
 

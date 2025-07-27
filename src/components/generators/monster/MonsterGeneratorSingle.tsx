@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { RefreshCw, Dices, ChevronLeft, ChevronRight, History, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { DiceService } from '@/lib/dice/diceService'
 import { MonsterService } from '@/lib/generators/monsterService'
 import { MonsterSummaryCard } from './MonsterSummaryCard'

@@ -44,7 +44,7 @@ export class AdventureService {
   }
 
   // Generiere einen Questgeber
-  static generateQuestGiver(problem: AdventureProblem, location: AdventureLocation): AdventureQuestGiver {
+  static generateQuestGiver(): AdventureQuestGiver {
     const roles = [
       'Bürgermeister', 'Dorfältester', 'Händler', 'Priester', 'Wache',
       'Gastwirt', 'Handwerker', 'Bauer', 'Gelehrter', 'Jäger'
@@ -100,7 +100,6 @@ export class AdventureService {
     problem: AdventureProblem,
     trigger: AdventureTrigger,
     obstacle: AdventureObstacle,
-    charactersCount: number = 4,
     complications?: AdventureComplication[]
   ): AdventureReward {
     // Basis: 20-40 Taler pro Charakter
@@ -218,16 +217,15 @@ Die Charaktere müssen ${obstacle.solutions[0].toLowerCase()} und dabei ${trigge
 
     // Generiere Questgeber
     const questGiver = options.customQuestGiver ? {
-      ...this.generateQuestGiver(problem, location),
+      ...this.generateQuestGiver(),
       ...options.customQuestGiver
-    } : this.generateQuestGiver(problem, location)
+    } : this.generateQuestGiver()
 
     // Berechne Belohnung
     const reward = this.calculateReward(
       problem,
       trigger,
       obstacle,
-      options.charactersCount || 4,
       options.complications
     )
 

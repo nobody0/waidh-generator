@@ -64,7 +64,7 @@ export class MonsterService {
   // Verteile Fähigkeiten basierend auf Alter und Stärke/Schwäche
   static distributeAbilities(
     age: MonsterAge,
-    attributes: Record<MonsterAttribute['type'], number>,
+    _attributes: Record<MonsterAttribute['type'], number>,
     strengthAttr: MonsterAttribute['type'],
     weaknessAttr: MonsterAttribute['type']
   ): Record<MonsterAttribute['type'], number> {

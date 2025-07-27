@@ -36,16 +36,23 @@ export function StepAbilities() {
       attributes[generatorState.weaknessAttribute] = -generatorState.weaknessRoll
       
       // Berechne Fähigkeiten-Verteilung
-      const distribution = MonsterService.distributeAbilities(attributes)
-      setAbilityDistribution(distribution)
-      
-      // Generiere Fähigkeiten wenn noch keine vorhanden
-      if (generatorState.abilities.length === 0) {
-        generateAbilities(distribution)
+      if (generatorState.age) {
+        const distribution = MonsterService.distributeAbilities(
+          generatorState.age,
+          attributes,
+          generatorState.strengthAttribute,
+          generatorState.weaknessAttribute
+        )
+        setAbilityDistribution(distribution)
+        
+        // Generiere Fähigkeiten wenn noch keine vorhanden
+        if (generatorState.abilities.length === 0) {
+          generateAbilities(distribution)
+        }
       }
     }
   }, [generatorState.strengthAttribute, generatorState.weaknessAttribute, 
-      generatorState.strengthRoll, generatorState.weaknessRoll])
+      generatorState.strengthRoll, generatorState.weaknessRoll, generatorState.age, generatorState.abilities.length])
 
   const generateAbilities = (distribution: Record<MonsterAttribute['type'], number>) => {
     const abilities: MonsterAbility[] = []

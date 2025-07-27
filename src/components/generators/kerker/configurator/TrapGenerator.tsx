@@ -36,11 +36,6 @@ Reset: ${trap.resetTime || 'Manuell'}`
     navigator.clipboard.writeText(trapText)
   }
 
-  const difficultyModifiers = {
-    easy: -5,
-    medium: 0,
-    hard: 5
-  }
 
   return (
     <div className="space-y-6">

@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { RefreshCw, Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { getAbilityTableByAttribute } from '@/data/tables/monsterTables'
-import { DiceService } from '@/lib/dice/diceService'
 import { MonsterService } from '@/lib/generators/monsterService'
 import type { MonsterAbility, MonsterAge, MonsterAttribute } from '@/types/monster'
 
