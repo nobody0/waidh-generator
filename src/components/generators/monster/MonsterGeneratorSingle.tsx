@@ -41,6 +41,8 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
   
   // Track if we're generating a new monster
   const [isGenerating, setIsGenerating] = useState(false)
+  // Track if we're doing a batch update (rollAll)
+  const [isBatchUpdate, setIsBatchUpdate] = useState(false)
   
   // Monster History
   const { 
@@ -209,8 +211,6 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
     
     // Würfle bis wir zwei unterschiedliche Eigenschaften haben
     const usedIds = new Set<string>()
-    // Füge existierende IDs hinzu um Duplikate zu vermeiden
-    properties.forEach(p => usedIds.add(p.value.id))
     
     let attempts = 0
     while (props.length < 2 && attempts < 20) {
@@ -223,12 +223,13 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
     }
     
     setProperties(props)
-  }, [properties])
+  }, [])
 
   // Alles würfeln
   const rollAll = useCallback(() => {
-    // Mark that we're generating a new monster
+    // Mark that we're generating a new monster and doing batch update
     setIsGenerating(true)
+    setIsBatchUpdate(true)
     
     // Würfle Alter
     const ageResult = DiceService.rollOnTable(monsterAgeTable)
@@ -285,13 +286,40 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
       }
     }
     
-    // Update all states at once
+    // Create the monster directly to avoid multiple re-renders
+    const newMonster = MonsterService.createMonster(
+      ageResult.value,
+      strengthResult.value,
+      weaknessResult.value,
+      ageResult.value.xValue,
+      ageResult.value.yValue,
+      newAbilities,
+      props.map(p => p.value),
+      undefined, // name
+      undefined, // description
+      {
+        age: ageResult.roll,
+        strength: strengthResult.roll,
+        weakness: weaknessResult.roll,
+        properties: props.map(p => p.roll)
+      }
+    )
+    
+    // Update all states at once - React 18 will batch these automatically
     setAgeResult({ value: ageResult.value, roll: ageResult.roll })
     setStrengthResult({ value: strengthResult.value, roll: strengthResult.roll })
     setWeaknessResult({ value: weaknessResult.value, roll: weaknessResult.roll })
     setAbilities(newAbilities)
     setProperties(props)
-  }, [])
+    setMonster(newMonster)
+    
+    // Add to history
+    addMonster(newMonster)
+    setIsGenerating(false)
+    
+    // Clear batch update flag after a short delay to ensure all effects have run
+    setTimeout(() => setIsBatchUpdate(false), 0)
+  }, [addMonster])
 
   // Direct editing handlers
   const handleAgeEdit = useCallback((newRoll: number) => {
@@ -363,6 +391,11 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
 
   // Erstelle Monster wenn alle Werte vorhanden sind
   useEffect(() => {
+    // Skip if we're doing a batch update (rollAll)
+    if (isBatchUpdate) {
+      return
+    }
+    
     if (ageResult && strengthResult && weaknessResult && abilities.length > 0) {
       const newMonster = MonsterService.createMonster(
         ageResult.value,
@@ -390,7 +423,7 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
       }
       setIsLoadingFromHistory(false)
     }
-  }, [ageResult, strengthResult, weaknessResult, abilities, properties, isLoadingFromHistory, isGenerating, addMonster])
+  }, [ageResult, strengthResult, weaknessResult, abilities, properties, isLoadingFromHistory, isGenerating, addMonster, isBatchUpdate])
 
   return (
     <div className="grid xl:grid-cols-2 gap-4">
