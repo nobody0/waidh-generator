@@ -315,6 +315,38 @@ export const MonsterGeneratorSingle = memo(function MonsterGeneratorSingle() {
   // Flag to track if we're loading from history
   const [isLoadingFromHistory, setIsLoadingFromHistory] = useState(false)
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input field
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      switch (e.key) {
+        case ' ':
+          e.preventDefault()
+          rollAll()
+          break
+        case 'ArrowLeft':
+          e.preventDefault()
+          if (canGoPrevious) goToPrevious()
+          break
+        case 'ArrowRight':
+          e.preventDefault()
+          if (canGoNext) goToNext()
+          break
+        case 'Delete':
+          e.preventDefault()
+          if (currentIndex >= 0) deleteCurrent()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [rollAll, canGoPrevious, canGoNext, goToPrevious, goToNext, currentIndex, deleteCurrent])
+
   // Erstelle Monster wenn alle Werte vorhanden sind
   useEffect(() => {
     if (ageResult && strengthResult && weaknessResult && abilities.length > 0) {

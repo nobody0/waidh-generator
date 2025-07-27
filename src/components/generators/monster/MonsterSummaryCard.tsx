@@ -77,7 +77,7 @@ export const MonsterSummaryCard = memo(function MonsterSummaryCard({ monster }: 
               </TooltipTrigger>
               <TooltipContent>
                 <p className="font-mono text-xs">
-                  {monster.age.baseLP} (Basis) + {monster.attributes.stärke - monster.age.baseAttributes} (STR-Bonus)
+                  {monster.age.baseLP} (Basis) + {monster.attributes.stärke} (STR)
                   {monster.age.id === 'weltenbestie' && ' × 2'}
                 </p>
               </TooltipContent>
@@ -93,7 +93,7 @@ export const MonsterSummaryCard = memo(function MonsterSummaryCard({ monster }: 
               </TooltipTrigger>
               <TooltipContent>
                 <p className="font-mono text-xs">
-                  {monster.age.baseSP} (Basis) + {monster.attributes.willenskraft - monster.age.baseAttributes} (WIL-Bonus) × {monster.age.spMultiplier}
+                  {monster.age.baseSP} (Basis) + {monster.attributes.willenskraft} (WIL) × {monster.age.spMultiplier}
                 </p>
               </TooltipContent>
             </Tooltip>

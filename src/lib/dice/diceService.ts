@@ -1,4 +1,4 @@
-import type { DiceType, DiceTable, DiceTableEntry, DiceRollResult, TableProbability } from '@/types/dice'
+import type { DiceType, DiceTable, DiceTableEntry, DiceRollResult, TableProbability, MultiDiceResult } from '@/types/dice'
 
 export class DiceService {
   private static rollSingleDie(): number {
@@ -21,6 +21,29 @@ export class DiceService {
     }
   }
 
+  static rollMultipleDice(diceType: DiceType): MultiDiceResult {
+    const dice: number[] = []
+    
+    switch (diceType) {
+      case '1d6':
+        dice.push(this.rollSingleDie())
+        break
+      case '2d6':
+        dice.push(this.rollSingleDie(), this.rollSingleDie())
+        break
+      case '3d6':
+        dice.push(this.rollSingleDie(), this.rollSingleDie(), this.rollSingleDie())
+        break
+      default:
+        throw new Error(`Cannot roll multiple dice for type: ${diceType}`)
+    }
+    
+    return {
+      dice,
+      total: dice.reduce((sum, die) => sum + die, 0)
+    }
+  }
+
   private static evaluateCustomFormula(formula: string): number {
     // Simple parser for dice formulas like "2d6+3" or "1d20-2"
     const match = formula.match(/(\d+)d(\d+)([+-]\d+)?/)
@@ -38,6 +61,22 @@ export class DiceService {
     }
     
     return Math.max(1, total)
+  }
+
+  // Convenience method for rolling custom dice formulas
+  static roll(formula: string): MultiDiceResult {
+    const total = this.evaluateCustomFormula(formula)
+    // For simple formulas, we can't reconstruct individual dice
+    // Just return the total
+    return {
+      dice: [total],
+      total
+    }
+  }
+
+  // Roll a number between min and max (inclusive)
+  static rollBetween(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   static rollOnTable<T>(table: DiceTable<T>, fixedValue?: number): DiceRollResult<T> {

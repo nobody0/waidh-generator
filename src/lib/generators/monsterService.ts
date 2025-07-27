@@ -14,37 +14,37 @@ import {
 export class MonsterService {
   // Berechne LP basierend auf Alter und Stärke
   static calculateLP(age: MonsterAge, strength: number): number {
-    // Bei Weltenbestie wird nur der STR-Bonus verdoppelt, nicht der gesamte STR-Wert
+    // WAIDH-Regel: LP = Basis-LP + STR-Wert
+    // Bei Weltenbestie: LP = Basis-LP + (STR-Wert × 2)
     if (age.id === 'weltenbestie') {
-      const strBonus = strength - age.baseAttributes
-      return age.baseLP + (strBonus * 2)
+      return age.baseLP + (strength * 2)
     }
-    // Bei anderen Monstern wird der STR-Bonus normal addiert
-    const strBonus = strength - age.baseAttributes
-    return age.baseLP + strBonus
+    // Bei allen anderen Monstern: LP = Basis-LP + STR-Wert
+    return age.baseLP + strength
   }
 
   // Berechne SP basierend auf Alter und Willenskraft
   static calculateSP(age: MonsterAge, willpower: number): number {
-    // SP-Formel verwendet nur den WIL-Bonus, nicht den gesamten WIL-Wert
-    const wilBonus = willpower - age.baseAttributes
-    return age.baseSP + (wilBonus * age.spMultiplier)
+    // WAIDH-Regel: SP = Basis-SP + (WIL-Wert × Multiplikator)
+    // Multiplikator: 3 für Jung bis Alt, 6 für Altehrwürdig/Weltenbestie
+    return age.baseSP + (willpower * age.spMultiplier)
   }
 
   // Berechne Initiative
   static calculateInitiative(dexterity: number, logic: number, currentLP: number, maxLP: number): number {
     const base = 1 + dexterity + logic
-    const lpPercent = currentLP / maxLP
+    const missingLP = maxLP - currentLP
     
-    // Mali basierend auf verlorenen LP (max -15 für große Monster)
-    let penalty = 0
-    if (lpPercent < 0.75) penalty = -1
-    if (lpPercent < 0.5) penalty = -3
-    if (lpPercent < 0.25) penalty = -5
+    // WAIDH-Regel: -1 pro fehlendem LP, aber maximal begrenzt
+    let penalty = -missingLP
     
-    // Große Monster haben höhere Mali-Grenzen
-    if (maxLP >= 100 && lpPercent < 0.25) penalty = -15
-    else if (maxLP >= 55 && lpPercent < 0.25) penalty = -10
+    // Maximale Mali nach Monster-Größe:
+    // Altehrwürdig/Weltenbestie: max -15
+    // Andere Monster: normale Mali ohne spezielle Begrenzung
+    if (maxLP >= 55) {
+      // Altehrwürdig (55+10=65 LP) oder Weltenbestie (100+15*2=130 LP)
+      penalty = Math.max(-15, penalty)
+    }
     
     return Math.max(1, base + penalty)
   }
@@ -52,8 +52,10 @@ export class MonsterService {
   // Berechne Angriff/Verteidigung
   static calculateAttackDefense(age: MonsterAge, dexterity: number): string {
     let diceCount = 3
-    if (age.id === 'altehrwuerdig') diceCount = 4
-    if (age.id === 'weltenbestie') diceCount = 5
+    // WAIDH-Regel: Altehrwürdig und Weltenbestie haben beide 4W6
+    if (age.id === 'altehrwuerdig' || age.id === 'weltenbestie') {
+      diceCount = 4
+    }
     
     const modifier = dexterity * 2
     return `${diceCount}W6${modifier >= 0 ? '+' : ''}${modifier}`

@@ -101,7 +101,7 @@ export const monsterAgeTable: MonsterAgeTable = {
         xValue: 5,
         yValue: 5
       },
-      description: 'Eine weltbedrohende Bestie (4W6 Angriff/Verteidigung)'
+      description: 'Eine weltbedrohende Bestie (4W6 Angriff/Verteidigung, regeneriert 5 LP/Zug wenn Mana vorhanden)'
     }
   ]
 }

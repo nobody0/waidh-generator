@@ -1,5 +1,10 @@
 export type DiceType = '1d6' | '2d6' | '3d6' | 'custom'
 
+export interface MultiDiceResult {
+  dice: number[]
+  total: number
+}
+
 export interface DiceRoll {
   diceType: DiceType
   customFormula?: string

@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Copy, Save, FileText, FileJson } from 'lucide-react'
+import { Copy, Save, FileText, FileJson, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useMonsterStore } from '@/store/monsterStore'
 import { MonsterService } from '@/lib/generators/monsterService'
 import { ATTRIBUTE_SHORT } from '@/types/monster'
@@ -175,13 +176,31 @@ export function MonsterDisplay() {
 
         {/* Spezial-Aktion */}
         <div className="mt-6 p-3 bg-primary/10 rounded-lg">
-          <h4 className="font-semibold mb-1">Spezial-Aktion:</h4>
+          <h4 className="font-semibold mb-1 flex items-center gap-2">
+            Spezial-Aktion:
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="w-4 h-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="font-semibold mb-1">ERSCHÖPFUNG bedeutet:</p>
+                  <p>-2 AP und -5 Initiative für den Rest des Kampfes</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </h4>
           <div className="text-sm">
-            <span className="font-medium">{currentMonster.specialAction.name}</span>
-            <span className="text-muted-foreground"> ({currentMonster.specialAction.cost} AP)</span>
-            {currentMonster.specialAction.exhaustion && (
-              <span className="text-yellow-600 dark:text-yellow-400 ml-2">ERSCHÖPFUNG</span>
-            )}
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{currentMonster.specialAction.name}</span>
+              <span className="text-muted-foreground">({currentMonster.specialAction.cost} AP)</span>
+              {currentMonster.specialAction.exhaustion && (
+                <span className="text-yellow-600 dark:text-yellow-400 font-semibold">ERSCHÖPFUNG</span>
+              )}
+            </div>
+            <div className="mt-1 text-muted-foreground">
+              {currentMonster.specialAction.effect}
+            </div>
           </div>
         </div>
 
