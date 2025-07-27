@@ -12,10 +12,6 @@ const Card = React.forwardRef<
       "rounded-lg border bg-card text-card-foreground shadow-sm",
       "parchment-bg border-rust-500/20 shadow-parchment",
       "relative overflow-hidden",
-      // Pentagon corner decoration
-      "before:absolute before:top-0 before:right-0",
-      "before:w-8 before:h-8 before:bg-steel-700",
-      "before:clip-pentagon",
       className
     )}
     {...props}

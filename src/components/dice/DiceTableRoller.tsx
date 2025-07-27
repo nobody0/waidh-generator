@@ -20,18 +20,14 @@ export function DiceTableRoller<T>({
   allowManualOverride = false,
   className 
 }: DiceTableRollerProps<T>) {
-  const { addRoll, isRolling, setRolling, soundEnabled } = useDiceStore()
+  const { addRoll } = useDiceStore()
   const [currentResult, setCurrentResult] = useState<DiceRollResult<T> | null>(null)
   const [manualValue, setManualValue] = useState<number | null>(null)
   const [showManualInput, setShowManualInput] = useState(false)
+  const [isRolling, setIsRolling] = useState(false)
 
   const handleRoll = async () => {
-    setRolling(true)
-    
-    if (soundEnabled) {
-      const audio = new Audio('/dice-roll.mp3')
-      audio.play().catch(() => {})
-    }
+    setIsRolling(true)
 
     // Animation delay
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -50,7 +46,7 @@ export function DiceTableRoller<T>({
       onRoll(result)
     }
 
-    setRolling(false)
+    setIsRolling(false)
     setManualValue(null)
   }
 

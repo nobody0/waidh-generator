@@ -1,6 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { DiceBar } from './dice/DiceBar'
 import { Pentagon } from './icons/Pentagon'
 
 export function Layout() {
@@ -54,11 +53,9 @@ export function Layout() {
         </header>
         
         {/* Content with max-width like settlements */}
-        <main className="max-w-7xl mx-auto p-6 pb-20">
+        <main className="max-w-7xl mx-auto p-6">
           <Outlet />
         </main>
-        
-        <DiceBar />
       </div>
     </div>
   )

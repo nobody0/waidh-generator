@@ -28,15 +28,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "relative inline-flex items-center justify-center whitespace-nowrap px-6 py-3",
+      "relative inline-flex items-center justify-center whitespace-nowrap px-4 py-2 rounded-t-md",
       "text-sm font-medium ring-offset-background transition-all duration-200",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       "disabled:pointer-events-none disabled:opacity-50",
-      // Pentagon shape
-      "clip-path-[polygon(15%_0%,85%_0%,100%_50%,85%_100%,15%_100%,0%_50%)]",
-      // Active state
+      // Active state with steel styling
       "data-[state=active]:bg-steel-700 data-[state=active]:text-steel-50",
-      "data-[state=active]:shadow-steel",
+      "data-[state=active]:shadow-steel data-[state=active]:border-b-2 data-[state=active]:border-primary",
       // Hover state
       "hover:bg-steel-600/50 hover:text-steel-100",
       className
